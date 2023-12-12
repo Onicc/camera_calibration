@@ -1,10 +1,12 @@
 # Camera Calibration
 
-该仓库使用ChArUco码来标定摄像头，将摄像头标定流程化。
+[中文](./README_CN.md) | [English](./README.md)
 
-## 安装
+This repository calibrates cameras using ChArUco markers, streamlining the camera calibration process.
 
-`camera_calibration`要求`opencv-contrib-python`和`opencv-python`不低于4.7.0。在本地安装该软件包会自动获取其他所需的依赖项。
+## Installation
+
+`camera_calibration` requires `opencv-contrib-python` and `opencv-python` version 4.7.0 or higher. Installing this package locally will automatically fetch other required dependencies.
 
 ```bash
 git clone https://github.com/Onicc/camera_calibration.git
@@ -12,10 +14,10 @@ cd camera_calibration
 pip install -r requirements.txt
 ```
 
-## 使用流程
+## Usage
 
-### 生成并打印标定板
-运行下面命令生成标定板，标定板的图片路径为`./calibration_board.png`。你也可以直接使用仓库中的[calibration_board.png](./calibration_board.png)。将其打印出来。
+### Generate and Print Calibration Board
+Run the following command to generate the calibration board. The path for the calibration board image is set to `./calibration_board.png`. You can also use the provided [calibration_board.png](./calibration_board.png). Print it out.
 
 ```bash
 python3 generate_calibration_board.py
@@ -23,21 +25,21 @@ python3 generate_calibration_board.py
 
 ![calibration_board](./calibration_board.png)
 
-### 相机标定
+### Camera Calibration
 
-测量标定板中纯黑色正方形的边长，单位为m，将其填入[camera_calibration.py](./camera_calibration.py)中第9行的`square_length`，即下面的`0.0024`。
+Measure the side length of the pure black squares on the calibration board in meters. Fill in the `square_length` on line 9 of [camera_calibration.py](./camera_calibration.py) with the measured value, for example, `0.024`.
 
 ```python
 board, aruco_dict, board_name = ChArUcoBoard(width=12, height=8, square_length=0.024)
 ```
 
-从不同角度拍摄标定板，采集大于20张，图片格式为`png`，图片存放路径为`./ChArUcoData`。运行下面命令进行标定，此时会显示标定图片，按下任意键切换下一张图片。
+Capture images of the calibration board from different angles, collecting more than 20 images in PNG format, and store them in `./ChArUcoData`. Run the following command to calibrate. The calibration images will be displayed, press any key to switch to the next image.
 
-```
+```bash
 python3 camera_calibration.py
 ```
 
-标定完成后命令行打印相机参数和畸变参数，同时参数也会保存在`./params/camera_params.yaml`。
+After calibration, the command line will print camera parameters and distortion coefficients. The parameters will also be saved in `./params/camera_params.yaml`.
 
 ```
 camera_matrix:
@@ -50,11 +52,11 @@ distortion_coefficients:
 Calibration successful. Calibration file used: ./params/camera_params.yaml
 ```
 
-### 使用标定参数估计相机位姿
+### Estimate Camera Pose Using Calibration Parameters
 
-修改[detect_marker.py](./detect_marker.py)59行的图片文件路径，运行下面命令，会自动读取yaml中相机参数，并在ChArUco码上画出坐标轴，终端打印旋转向量和平移向量。
+Modify the image file path on line 59 of [detect_marker.py](./detect_marker.py). Run the following command, and it will automatically read the camera parameters from the YAML file, draw coordinate axes on the ChArUco markers, and print the rotation and translation vectors in the terminal.
 
-```
+```bash
 python3 detect_marker.py
 ```
 
@@ -72,4 +74,3 @@ tvec:  [[-0.11929498]
 ## Reference
 
 https://github.com/Jcparkyn/dpoint
-
